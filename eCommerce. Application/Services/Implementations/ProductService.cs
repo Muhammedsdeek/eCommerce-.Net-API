@@ -34,6 +34,9 @@ namespace eCommerce._Application.Services.Implementations
 
 			var Result= await ProductInterface.DeleteAsync(id);
 
+			//if (Result == 0)
+			//	return new ServiceResponse(false, "Product Deleted failed.");
+
 			if (Result > 0)
 				return new ServiceResponse(true, "Product deleted successfully.");
 

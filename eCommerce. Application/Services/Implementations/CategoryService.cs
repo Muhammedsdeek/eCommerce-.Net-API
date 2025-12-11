@@ -34,6 +34,9 @@ namespace eCommerce._Application.Services.Implementations
 
 		  int Result= await categoryService.DeleteAsync(id);
 
+			//if(Result==0)
+			//	return new ServiceResponse(false, "Category Deleted failed.");
+
 			if (Result > 0)
 				return new ServiceResponse(true, "Category Deleted successfully.");
 

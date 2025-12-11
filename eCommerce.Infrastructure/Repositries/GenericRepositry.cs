@@ -1,7 +1,6 @@
 ﻿
 using eCommerce.Domain.Intefaces;
 using eCommerce.Infrastructure.Data;
-using eCommerce.Infrastructure.Exeptions;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -25,8 +24,12 @@ namespace eCommerce.Infrastructure.Repositries
 
 		public async Task<int> DeleteAsync(Guid id)
 		{
-		
-			 var result= await GetByIdAsync(id) ?? throw new ItemNotFounException($"Item With Id : ({id}) Bot Found Found");
+
+			var result = await GetByIdAsync(id);
+			//?? throw new ItemNotFounException($"Item With Id : ({id}) Bot Found Found");
+
+			if(result is null)
+				return 0;
 			Context.Set<TEntity>().Remove(result);
 			return await Context?.SaveChangesAsync();	
 		}
