@@ -16,7 +16,5 @@ namespace eCommerce._Application.DTOs.Category
 	}
 
 
-
-
 }
 

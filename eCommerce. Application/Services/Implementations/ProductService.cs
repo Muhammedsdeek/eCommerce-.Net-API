@@ -1,4 +1,5 @@
-﻿using eCommerce._Application.DTOs;
+﻿using AutoMapper;
+using eCommerce._Application.DTOs;
 using eCommerce._Application.DTOs.Product;
 using eCommerce._Application.Services.Interfaces;
 using eCommerce.Domain.Entities;
@@ -11,34 +12,71 @@ using System.Threading.Tasks;
 
 namespace eCommerce._Application.Services.Implementations
 {
-	internal class ProductService(Igeneric<Product> ProductInterface) : IproductService
+	public class ProductService(Igeneric<Product> ProductInterface, IMapper mapper) : IproductService
 	{
-		public async Task<ServiceResponse> AddAsync(CreateProduct entity)
+		public async Task<ServiceResponse> AddAsync(CreateProduct product)
 		{
 
-			//return await ProductInterface.AddAsync();
-			throw new NotImplementedException();
+
+			var MappedData = mapper.Map<Product>(product);
+			int Result = await ProductInterface.AddAsync(MappedData);
+
+			if (Result > 0)
+				return new ServiceResponse(true, "Product Added successfully.");
+
+			return new ServiceResponse(false, "Product Added failed.");
 
 		}
 
-		public Task<ServiceResponse> DeleteAsync(Guid id)
+		public async Task<ServiceResponse> DeleteAsync(Guid id)
 		{
-			throw new NotImplementedException();
+			
+
+			var Result= await ProductInterface.DeleteAsync(id);
+
+			if (Result > 0)
+				return new ServiceResponse(true, "Product deleted successfully.");
+
+			return new ServiceResponse(false, "Product deletion failed.");
+
 		}
 
-		public Task<IEnumerable<GetProduct>> GetAllAsync()
+		public async Task<IEnumerable<GetProduct>> GetAllAsync()
 		{
-			throw new NotImplementedException();
+			
+			 var RawData=await ProductInterface.GetAllAsync();
+
+
+			if (!RawData.Any())
+				return [];
+
+		
+			return mapper.Map<IEnumerable<GetProduct>>(RawData);
 		}
 
-		public Task<GetProduct> GetByIdAsync(Guid id)
+		public async Task<GetProduct> GetByIdAsync(Guid id)
 		{
-			throw new NotImplementedException();
+			
+			var rawData=  await  ProductInterface.GetByIdAsync(id);
+
+			if (rawData == null)
+				return new GetProduct();
+
+			return mapper.Map<GetProduct>(rawData);
 		}
 
-		public Task<ServiceResponse> UpdateAsync(UpdateProduct entity)
+		public async Task<ServiceResponse> UpdateAsync(UpdateProduct product)
 		{
-			throw new NotImplementedException();
+
+			var MappedData= mapper.Map<Product>(product);
+			int Result = await ProductInterface.UpdateAsync(MappedData);
+
+			if(Result>0)
+			 return new ServiceResponse(true, "Product Updated successfully");
+
+
+			return new ServiceResponse(true, "Product Updated failed");
+
 		}
 	}
 }

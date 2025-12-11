@@ -16,8 +16,8 @@ namespace eCommerce._Application.DependencyInjection
 		public static IServiceCollection AddApplicationService(this IServiceCollection services)
 		{
 
-		//	MappingConfig config = new MappingConfig();
-		//	services.AddAutoMapper(typeof(MappingConfig));
+		
+			services.AddAutoMapper(typeof(MappingConfig));
 			services.AddScoped<ICategoryService, CategoryService>();
 
 			services.AddScoped<IproductService, ProductService>();
