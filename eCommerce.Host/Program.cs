@@ -3,6 +3,7 @@ using eCommerce.Infrastructure.DependencyInjection;
 using eCommerce._Application.DependencyInjection;
 
 using eCommerce.Infrastructure.DependencyInjection;
+using Serilog;
 
 namespace eCommerce.Host
 {
@@ -12,6 +13,15 @@ namespace eCommerce.Host
 		{
 			var builder = WebApplication.CreateBuilder(args);
 
+
+			Log.Logger = new LoggerConfiguration()
+				.Enrich.FromLogContext()
+				.WriteTo.Console()
+				.WriteTo.File("log/log.txt", rollingInterval: RollingInterval.Day)
+				.CreateLogger();
+
+			builder.Host.UseSerilog();
+			Log.Logger.Information("application is building...............");
 			// Add services to the container.
 
 			builder.Services.AddControllers();
@@ -20,29 +30,57 @@ namespace eCommerce.Host
 			builder.Services.AddSwaggerGen();
 
 
+			builder.Services.AddCors(options =>
+			{
 
+				options.AddDefaultPolicy(policy =>
+				{
+					policy.AllowAnyHeader();
+					policy.AllowAnyMethod();
+					policy.AllowAnyOrigin();
+				});
+			});
 			
 
 			builder.Services.AddInfrastructureService(builder.Configuration);
 			builder.Services.AddApplicationService();
 
-			var app = builder.Build();
 
-			// Configure the HTTP request pipeline.
-			if (app.Environment.IsDevelopment())
-			{
-				app.UseSwagger();
-				app.UseSwaggerUI();
+			try {
+				var app = builder.Build();
+				app.UseCors();
+				app.UseSerilogRequestLogging();
+				// Configure the HTTP request pipeline.
+				if (app.Environment.IsDevelopment())
+				{
+					app.UseSwagger();
+					app.UseSwaggerUI();
+				}
+
+				app.UseInfrastructureService();
+				app.UseHttpsRedirection();
+
+				app.UseAuthorization();
+
+
+				app.MapControllers();
+				Log.Logger.Information("Application is running ........");
+				app.Run();
+
 			}
 
-			app.UseHttpsRedirection();
-
-			app.UseAuthorization();
+			catch (Exception ex) {
 
 
-			app.MapControllers();
+				Log.Logger.Error(ex, "Application fial to start.....");
+			}
 
-			app.Run();
+			finally
+			{
+
+				Log.CloseAndFlush();	
+
+			}
 		}
 	}
 }

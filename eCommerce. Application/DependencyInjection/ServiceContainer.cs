@@ -1,6 +1,7 @@
 ﻿using eCommerce._Application.Mapping;
 using eCommerce._Application.Services.Implementations;
 using eCommerce._Application.Services.Interfaces;
+using eCommerce._Application.Services.Interfaces.Logging;
 using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Collections.Generic;
@@ -21,6 +22,7 @@ namespace eCommerce._Application.DependencyInjection
 			services.AddScoped<ICategoryService, CategoryService>();
 
 			services.AddScoped<IproductService, ProductService>();
+			
 			return services;
 		}
 	
