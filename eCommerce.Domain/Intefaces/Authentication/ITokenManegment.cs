@@ -7,7 +7,7 @@ namespace eCommerce.Domain.Intefaces.Authentication
 
 		string GetRefreshToke();
 
-		Task<List<Claim>> GetUserCliamsFromToke(string Email);
+		List<Claim> GetUserCliamsFromToke(string token);
 
 		Task<bool> ValidateRefreshToke(string Token);
 
@@ -17,7 +17,7 @@ namespace eCommerce.Domain.Intefaces.Authentication
 
 		Task<int>UpdateRefreshToke(string UserId, string RefreshToken);
 
-		string GenerateToken(List<Claim> Claims);
+	Task<	string> GenerateToken(List<Claim> Claims);
 
 
 	}

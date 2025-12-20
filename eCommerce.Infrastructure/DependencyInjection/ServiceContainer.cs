@@ -2,9 +2,11 @@
 using eCommerce.Domain.Entities;
 using eCommerce.Domain.Entities.Identity;
 using eCommerce.Domain.Intefaces;
+using eCommerce.Domain.Intefaces.Authentication;
 using eCommerce.Infrastructure.Data;
 using eCommerce.Infrastructure.MIddleware;
 using eCommerce.Infrastructure.Repositries;
+using eCommerce.Infrastructure.Repositries.Authentication;
 using eCommerce.Infrastructure.Services;
 using EntityFramework.Exceptions.SqlServer;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -95,10 +97,15 @@ namespace eCommerce.Infrastructure.DependencyInjection
 						ValidAudience = Config["JWT:Audience"],
 						ClockSkew = TimeSpan.Zero,
 						IssuerSigningKey =
-						new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Config["JWT:key"]!))
+						new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Config["JWT:Key"]!))
 					};
 				})
 				;
+
+			services.AddScoped<IRoleManegment, RoleManegment>();
+			services.AddScoped<IUserManegment, UserManegment>();
+
+			services.AddScoped<ITokenManegment, Tokemanegment>();
 			return services;
 		}
 
