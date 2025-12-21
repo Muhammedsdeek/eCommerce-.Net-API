@@ -1,11 +1,15 @@
 ﻿using eCommerce._Application.Mapping;
 using eCommerce._Application.Services.Implementations;
 using eCommerce._Application.Services.Implementations.Authentication;
+using eCommerce._Application.Services.Implementations.Cart;
 using eCommerce._Application.Services.Interfaces;
 using eCommerce._Application.Services.Interfaces.Authentication;
+using eCommerce._Application.Services.Interfaces.Cart;
 using eCommerce._Application.Services.Interfaces.Logging;
 using eCommerce._Application.Validations;
 using eCommerce._Application.Validations.Authentication;
+using eCommerce.Domain.Entities.Cart;
+using eCommerce.Domain.Intefaces.Cart;
 using FluentValidation;
 using FluentValidation.AspNetCore;
 using Microsoft.Extensions.DependencyInjection;
@@ -34,6 +38,13 @@ namespace eCommerce._Application.DependencyInjection
 			services.AddScoped<IvalidateService, validationService>();
 
 			services.AddScoped<IAuthenticationService, AuthenticationService>();
+
+
+			services.AddScoped<IpaymentMethodService, PaymentMethodservice>();
+
+			services.AddScoped<IcartService, CartService>();
+
+			
 			return services;
 		}
 	

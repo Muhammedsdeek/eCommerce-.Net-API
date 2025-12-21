@@ -1,5 +1,6 @@
 ﻿using eCommerce.Domain.Entities;
 using eCommerce.Domain.Entities.Identity;
+using eCommerce.Domain.Entities.Cart;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
@@ -22,11 +23,29 @@ namespace eCommerce.Infrastructure.Data
 
 		public DbSet<RefreshToken> RefreshTokens { get; set; }
 
+
+		public DbSet<PaymentMethod> PaymentMethods { get; set; }
+		public DbSet<Achive> Achives { get; set; }
 		protected override void OnModelCreating(ModelBuilder builder)
 		{
 
 
-			 builder.Entity<IdentityRole>().
+
+			builder.Entity<PaymentMethod>().
+			   HasData(
+
+				new PaymentMethod
+				{
+					ID = Guid.NewGuid(),
+					Name = "Credet Cart",
+				
+				}
+
+				
+			   );
+
+
+			builder.Entity<IdentityRole>().
 				HasData(
 
 				 new IdentityRole
